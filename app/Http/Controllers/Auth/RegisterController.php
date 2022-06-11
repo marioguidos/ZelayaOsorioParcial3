@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Auditor;
 use App\Models\Cliente;
+use App\Models\Seller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -51,20 +53,23 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         $userType = $data['role'];
-        if ($userType == 'user') {
+        if ($userType == 'seller') {
             return Validator::make($data, [
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
                 'address' => ['required', 'string', 'min:8'],
-                'dui' => ['required'],
-                'phone' => ['required'],
+                'dui' => ['required', 'string', 'min:8'],
+                'nit' => ['required', 'string', 'min:8'],
             ]);
         } else {
             return Validator::make($data, [
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
+                'address' => ['required', 'string', 'min:8'],
+                'dui' => ['required', 'string', 'min:8'],
+                'nit' => ['required', 'string', 'min:8'],
             ]);
         }
     }
@@ -78,25 +83,30 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $userType = $data['role'];
-        if ($userType == 'user') {
+        if ($userType == 'seller') {
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
-            ])->assignRole('user');
-            
-        } else if ($userType == 'consultant') {
-            $user = User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => Hash::make($data['password']),
-            ])->assignRole('consultant');
+            ])->assignRole('seller');
+            Seller::create([
+                "dui" => "123123213",
+                "address" => "Barrio el calvario",
+                "nit" => "1234561234565",
+                "id_usuario" => $user->id
+            ]);
         } else {
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
             ])->assignRole('admin');
+            Auditor::create([
+                "dui" => "123123213",
+                "address" => "Barrio el calvario",
+                "nit" => "1234561234565",
+                "id_usuario" => $user->id
+            ]);
         }
         return $user;
     }
