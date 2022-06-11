@@ -14,4 +14,13 @@ class Seller extends Model
         'address',
         'id_usuario',
     ];
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
+    public function product()
+    {
+        return $this->belongsTo(Product::class ,'fk_seller');
+    }
 }
