@@ -8,9 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-
     public function seller()
     {
-        return $this->hasOne(seller::class ,'id_seller');
+        return $this->belongsTo(Seller::class, "id_seller");
     }
 }

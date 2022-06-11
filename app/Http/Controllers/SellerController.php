@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Seller;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,9 @@ class SellerController extends Controller
      */
     public function index()
     {
-        return view('seller.index');
+        $products = Product::where ( 'fk_seller',auth()->user()->seller->id_seller)->get();
+        //dd($products);
+        return view('seller.index',compact('products'));
     }
 
     /**

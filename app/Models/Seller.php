@@ -17,10 +17,10 @@ class Seller extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class,'id_seller');
+        return $this->belongsTo(User::class,'id');
     }
-    public function product()
+    public function products()
     {
-        return $this->belongsTo(Product::class ,'fk_seller');
+        return $this->hasMany(Product::class ,'fk_seller');
     }
 }

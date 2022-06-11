@@ -3,7 +3,7 @@
         <v-container>
             <v-data-table
                 :headers="headers"
-                :items="desserts"
+                :items="prods"
                 sort-by="name"
                 class="elevation-1"
                 :search="search"
@@ -124,7 +124,12 @@
                     </v-toolbar>
                 </template>
                 <template v-slot:item.actions="{ item }">
-                    <v-icon large color="#EDE04D" class="mr-2" @click="editItem(item)">
+                    <v-icon
+                        large
+                        color="#EDE04D"
+                        class="mr-2"
+                        @click="editItem(item)"
+                    >
                         mdi-pencil
                     </v-icon>
                     <v-icon large color="#ED4F32" @click="deleteItem(item)">
@@ -141,43 +146,50 @@
 
 <script>
 export default {
+    props: ["products"],
     data: () => ({
         search: "",
         dialog: false,
         dialogDelete: false,
         headers: [
+            { text: "ID", align: "start", value: "id", sortable: false },
             {
                 text: "Nombre",
                 align: "center",
                 value: "name",
             },
-            { text: "Descripcion", value: "calories" },
-            { text: "Precio Unitario", value: "fat" },
-            { text: "Existencia", value: "carbs" },
-            { text: "Garantia", value: "protein" },
+            { text: "Descripcion", value: "desc" },
+            { text: "Precio Unitario", value: "price" },
+            { text: "Existencia", value: "stock" },
+            { text: "Garantia", value: "warranty" },
             { text: "Acciones", value: "actions", sortable: false },
         ],
-        desserts: [],
+        prods: [],
         editedIndex: -1,
         editedItem: {
+            id: "",
             name: "",
-            calories: 0,
-            fat: 0,
-            carbs: 0,
-            protein: 0,
+            desc: "",
+            price: "",
+            stock: 0,
+            warranty: "",
         },
         defaultItem: {
+            id: "",
             name: "",
-            calories: 0,
-            fat: 0,
-            carbs: 0,
-            protein: 0,
+            desc: "",
+            price: "",
+            stock: 0,
+            warranty: "",
         },
+        rules: {},
     }),
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? "Nuevo Producto" : "Editar Producto";
+            return this.editedIndex === -1
+                ? "Nuevo Producto"
+                : "Editar Producto";
         },
     },
 
@@ -196,82 +208,22 @@ export default {
 
     methods: {
         initialize() {
-            this.desserts = [
-                {
-                    name: "Frozen Yogurt",
-                    calories: 159,
-                    fat: 6.0,
-                    carbs: 24,
-                    protein: 4.0,
-                },
-                {
-                    name: "Ice cream sandwich",
-                    calories: 237,
-                    fat: 9.0,
-                    carbs: 37,
-                    protein: 4.3,
-                },
-                {
-                    name: "Eclair",
-                    calories: 262,
-                    fat: 16.0,
-                    carbs: 23,
-                    protein: 6.0,
-                },
-                {
-                    name: "Cupcake",
-                    calories: 305,
-                    fat: 3.7,
-                    carbs: 67,
-                    protein: 4.3,
-                },
-                {
-                    name: "Gingerbread",
-                    calories: 356,
-                    fat: 16.0,
-                    carbs: 49,
-                    protein: 3.9,
-                },
-                {
-                    name: "Jelly bean",
-                    calories: 375,
-                    fat: 0.0,
-                    carbs: 94,
-                    protein: 0.0,
-                },
-                {
-                    name: "Lollipop",
-                    calories: 392,
-                    fat: 0.2,
-                    carbs: 98,
-                    protein: 0,
-                },
-                {
-                    name: "Honeycomb",
-                    calories: 408,
-                    fat: 3.2,
-                    carbs: 87,
-                    protein: 6.5,
-                },
-                {
-                    name: "Donut",
-                    calories: 452,
-                    fat: 25.0,
-                    carbs: 51,
-                    protein: 4.9,
-                },
-                {
-                    name: "KitKat",
-                    calories: 518,
-                    fat: 26.0,
-                    carbs: 65,
-                    protein: 7,
-                },
-            ];
+            console.log(this.products);
+            this.products.map((p) => {
+                this.prods.push({
+                    id: p.id,
+                    name: p.name,
+                    desc: p.description,
+                    price: p.unitPrice,
+                    stock: p.existence,
+                    warranty: p.warranty,
+                });
+            });
         },
 
         editItem(item) {
-            this.editedIndex = this.desserts.indexOf(item);
+            console.log(item)
+            this.editedIndex = this.prods.indexOf(item);
             this.editedItem = Object.assign({}, item);
             this.dialog = true;
         },
@@ -309,7 +261,7 @@ export default {
             } else {
                 this.desserts.push(this.editedItem);
             }
-            this.close();
+            //this.close();
         },
     },
 };
