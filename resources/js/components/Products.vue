@@ -42,36 +42,43 @@
                                 <v-card-text>
                                     <v-container>
                                         <v-row>
-                                            <v-col cols="12" sm="6" md="4">
+                                            <v-col cols="12" sm="6" md="6">
                                                 <v-text-field
                                                     v-model="editedItem.name"
-                                                    label="Dessert name"
+                                                    label="Nombre"
+                                                    :rules="rules.name"
                                                 ></v-text-field>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="4">
+                                            <v-col cols="12" sm="6" md="6">
+                                                <v-text-field
+                                                    v-model="editedItem.desc"
+                                                    label="Descripción"
+                                                    :rules="rules.desc"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="6" md="6">
+                                                <v-text-field
+                                                    v-model="editedItem.price"
+                                                    label="Precio ($)"
+                                                    :rules="rules.price"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="6" md="6">
+                                                <v-text-field
+                                                    v-model="editedItem.stock"
+                                                    :rules="rules.stock"
+                                                    label="Existencias"
+                                                    type="number"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="6" md="6">
                                                 <v-text-field
                                                     v-model="
-                                                        editedItem.calories
+                                                        editedItem.warranty
                                                     "
-                                                    label="Calories"
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field
-                                                    v-model="editedItem.fat"
-                                                    label="Fat (g)"
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field
-                                                    v-model="editedItem.carbs"
-                                                    label="Carbs (g)"
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field
-                                                    v-model="editedItem.protein"
-                                                    label="Protein (g)"
+                                                    label="Garantía"
+                                                    :rules="rules.warranty"
+                                                    type="month"
                                                 ></v-text-field>
                                             </v-col>
                                         </v-row>
@@ -80,19 +87,13 @@
 
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
+                                    <v-btn @click="close"> Cancelar </v-btn>
                                     <v-btn
-                                        color="blue darken-1"
-                                        text
-                                        @click="close"
-                                    >
-                                        Cancel
-                                    </v-btn>
-                                    <v-btn
-                                        color="blue darken-1"
-                                        text
+                                        color="#15CD72"
                                         @click="save"
+                                        style="color: white"
                                     >
-                                        Save
+                                        Guardar
                                     </v-btn>
                                 </v-card-actions>
                             </v-card>
@@ -106,7 +107,7 @@
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn
-                                        color="blue darken-1"
+                                        color="blue"
                                         text
                                         @click="closeDelete"
                                         >Cancel</v-btn
@@ -182,7 +183,13 @@ export default {
             stock: 0,
             warranty: "",
         },
-        rules: {},
+        rules: {
+            name: [(v) => !!v || "Valor requerido"],
+            desc: [(v) => !!v || "Valor requerido"],
+            price: [(v) => !!v || "Valor requerido"],
+            stock: [(v) => !!v || "Valor requerido"],
+            warranty: [(v) => !!v || "Valor requerido"],
+        },
     }),
 
     computed: {
@@ -222,7 +229,7 @@ export default {
         },
 
         editItem(item) {
-            console.log(item)
+            console.log(item);
             this.editedIndex = this.prods.indexOf(item);
             this.editedItem = Object.assign({}, item);
             this.dialog = true;
@@ -256,12 +263,31 @@ export default {
         },
 
         save() {
-            if (this.editedIndex > -1) {
-                Object.assign(this.desserts[this.editedIndex], this.editedItem);
-            } else {
-                this.desserts.push(this.editedItem);
+            if (this.validator()) {
+                if (this.editedIndex > -1) {
+                    Object.assign(
+                        this.prods[this.editedIndex],
+                        this.editedItem
+                    );
+                } else {
+                    this.prods.push(this.editedItem);
+                }
+                this.close();
             }
-            //this.close();
+        },
+        validator() {
+            let it = this.editedItem;
+            if (
+                it.name != "" ||
+                it.desc != "" ||
+                it.price != "" ||
+                it.stock != "" ||
+                it.warranty != ""
+            ) {
+                return true;
+            } else {
+                return false;
+            }
         },
     },
 };

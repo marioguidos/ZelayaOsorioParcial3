@@ -5577,6 +5577,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["products"],
   data: function data() {
@@ -5628,7 +5629,23 @@ __webpack_require__.r(__webpack_exports__);
         stock: 0,
         warranty: ""
       },
-      rules: {}
+      rules: {
+        name: [function (v) {
+          return !!v || "Valor requerido";
+        }],
+        desc: [function (v) {
+          return !!v || "Valor requerido";
+        }],
+        price: [function (v) {
+          return !!v || "Valor requerido";
+        }],
+        stock: [function (v) {
+          return !!v || "Valor requerido";
+        }],
+        warranty: [function (v) {
+          return !!v || "Valor requerido";
+        }]
+      }
     };
   },
   computed: {
@@ -5697,12 +5714,24 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     save: function save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      } else {
-        this.desserts.push(this.editedItem);
-      } //this.close();
+      if (this.validator()) {
+        if (this.editedIndex > -1) {
+          Object.assign(this.prods[this.editedIndex], this.editedItem);
+        } else {
+          this.prods.push(this.editedItem);
+        }
 
+        this.close();
+      }
+    },
+    validator: function validator() {
+      var it = this.editedItem;
+
+      if (it.name != "" || it.desc != "" || it.price != "" || it.stock != "" || it.warranty != "") {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 });
@@ -29164,13 +29193,14 @@ var render = function () {
                                                 attrs: {
                                                   cols: "12",
                                                   sm: "6",
-                                                  md: "4",
+                                                  md: "6",
                                                 },
                                               },
                                               [
                                                 _c("v-text-field", {
                                                   attrs: {
-                                                    label: "Dessert name",
+                                                    label: "Nombre",
+                                                    rules: _vm.rules.name,
                                                   },
                                                   model: {
                                                     value: _vm.editedItem.name,
@@ -29195,114 +29225,125 @@ var render = function () {
                                                 attrs: {
                                                   cols: "12",
                                                   sm: "6",
-                                                  md: "4",
-                                                },
-                                              },
-                                              [
-                                                _c("v-text-field", {
-                                                  attrs: { label: "Calories" },
-                                                  model: {
-                                                    value:
-                                                      _vm.editedItem.calories,
-                                                    callback: function ($$v) {
-                                                      _vm.$set(
-                                                        _vm.editedItem,
-                                                        "calories",
-                                                        $$v
-                                                      )
-                                                    },
-                                                    expression:
-                                                      "\n                                                    editedItem.calories\n                                                ",
-                                                  },
-                                                }),
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-col",
-                                              {
-                                                attrs: {
-                                                  cols: "12",
-                                                  sm: "6",
-                                                  md: "4",
-                                                },
-                                              },
-                                              [
-                                                _c("v-text-field", {
-                                                  attrs: { label: "Fat (g)" },
-                                                  model: {
-                                                    value: _vm.editedItem.fat,
-                                                    callback: function ($$v) {
-                                                      _vm.$set(
-                                                        _vm.editedItem,
-                                                        "fat",
-                                                        $$v
-                                                      )
-                                                    },
-                                                    expression:
-                                                      "editedItem.fat",
-                                                  },
-                                                }),
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-col",
-                                              {
-                                                attrs: {
-                                                  cols: "12",
-                                                  sm: "6",
-                                                  md: "4",
-                                                },
-                                              },
-                                              [
-                                                _c("v-text-field", {
-                                                  attrs: { label: "Carbs (g)" },
-                                                  model: {
-                                                    value: _vm.editedItem.carbs,
-                                                    callback: function ($$v) {
-                                                      _vm.$set(
-                                                        _vm.editedItem,
-                                                        "carbs",
-                                                        $$v
-                                                      )
-                                                    },
-                                                    expression:
-                                                      "editedItem.carbs",
-                                                  },
-                                                }),
-                                              ],
-                                              1
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-col",
-                                              {
-                                                attrs: {
-                                                  cols: "12",
-                                                  sm: "6",
-                                                  md: "4",
+                                                  md: "6",
                                                 },
                                               },
                                               [
                                                 _c("v-text-field", {
                                                   attrs: {
-                                                    label: "Protein (g)",
+                                                    label: "Descripción",
+                                                    rules: _vm.rules.desc,
                                                   },
                                                   model: {
-                                                    value:
-                                                      _vm.editedItem.protein,
+                                                    value: _vm.editedItem.desc,
                                                     callback: function ($$v) {
                                                       _vm.$set(
                                                         _vm.editedItem,
-                                                        "protein",
+                                                        "desc",
                                                         $$v
                                                       )
                                                     },
                                                     expression:
-                                                      "editedItem.protein",
+                                                      "editedItem.desc",
+                                                  },
+                                                }),
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-col",
+                                              {
+                                                attrs: {
+                                                  cols: "12",
+                                                  sm: "6",
+                                                  md: "6",
+                                                },
+                                              },
+                                              [
+                                                _c("v-text-field", {
+                                                  attrs: {
+                                                    label: "Precio ($)",
+                                                    rules: _vm.rules.price,
+                                                  },
+                                                  model: {
+                                                    value: _vm.editedItem.price,
+                                                    callback: function ($$v) {
+                                                      _vm.$set(
+                                                        _vm.editedItem,
+                                                        "price",
+                                                        $$v
+                                                      )
+                                                    },
+                                                    expression:
+                                                      "editedItem.price",
+                                                  },
+                                                }),
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-col",
+                                              {
+                                                attrs: {
+                                                  cols: "12",
+                                                  sm: "6",
+                                                  md: "6",
+                                                },
+                                              },
+                                              [
+                                                _c("v-text-field", {
+                                                  attrs: {
+                                                    rules: _vm.rules.stock,
+                                                    label: "Existencias",
+                                                    type: "number",
+                                                  },
+                                                  model: {
+                                                    value: _vm.editedItem.stock,
+                                                    callback: function ($$v) {
+                                                      _vm.$set(
+                                                        _vm.editedItem,
+                                                        "stock",
+                                                        $$v
+                                                      )
+                                                    },
+                                                    expression:
+                                                      "editedItem.stock",
+                                                  },
+                                                }),
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-col",
+                                              {
+                                                attrs: {
+                                                  cols: "12",
+                                                  sm: "6",
+                                                  md: "6",
+                                                },
+                                              },
+                                              [
+                                                _c("v-text-field", {
+                                                  attrs: {
+                                                    label: "Garantía",
+                                                    rules: _vm.rules.warranty,
+                                                    type: "month",
+                                                  },
+                                                  model: {
+                                                    value:
+                                                      _vm.editedItem.warranty,
+                                                    callback: function ($$v) {
+                                                      _vm.$set(
+                                                        _vm.editedItem,
+                                                        "warranty",
+                                                        $$v
+                                                      )
+                                                    },
+                                                    expression:
+                                                      "\n                                                    editedItem.warranty\n                                                ",
                                                   },
                                                 }),
                                               ],
@@ -29323,34 +29364,20 @@ var render = function () {
                                   [
                                     _c("v-spacer"),
                                     _vm._v(" "),
-                                    _c(
-                                      "v-btn",
-                                      {
-                                        attrs: {
-                                          color: "blue darken-1",
-                                          text: "",
-                                        },
-                                        on: { click: _vm.close },
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                                    Cancel\n                                "
-                                        ),
-                                      ]
-                                    ),
+                                    _c("v-btn", { on: { click: _vm.close } }, [
+                                      _vm._v(" Cancelar "),
+                                    ]),
                                     _vm._v(" "),
                                     _c(
                                       "v-btn",
                                       {
-                                        attrs: {
-                                          color: "blue darken-1",
-                                          text: "",
-                                        },
+                                        staticStyle: { color: "white" },
+                                        attrs: { color: "#15CD72" },
                                         on: { click: _vm.save },
                                       },
                                       [
                                         _vm._v(
-                                          "\n                                    Save\n                                "
+                                          "\n                                    Guardar\n                                "
                                         ),
                                       ]
                                     ),
@@ -29394,10 +29421,7 @@ var render = function () {
                                     _c(
                                       "v-btn",
                                       {
-                                        attrs: {
-                                          color: "blue darken-1",
-                                          text: "",
-                                        },
+                                        attrs: { color: "blue", text: "" },
                                         on: { click: _vm.closeDelete },
                                       },
                                       [_vm._v("Cancel")]
