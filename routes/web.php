@@ -20,7 +20,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::middleware(['auth', 'role:admin'])->name('admin.')->prefix('admin')->group(function () {
+Route::middleware(['auth', 'role:auditor'])->name('admin.')->prefix('admin')->group(function () {
     Route::get('/', function () {
         return "this a response";
     })->name('index');
