@@ -35,7 +35,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product = new Product();
+        $product->name = $request['name'];
+        $product->warranty = $request['warranty'];
+        $product->unitPrice = $request['price'];
+        $product->existence = $request['stock'];
+        $product->description = $request['desc'];
+        $product->fk_seller = auth()->user()->seller->id_seller;
+        if ($product->save()) {
+            return response()->json(
+                $product
+            );
+        } else {
+            return response()->json(
+                'error'
+            );
+        }
     }
 
     /**
@@ -69,7 +84,22 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $product = Product::find($request['id']);
+        $product->name = $request['name'];
+        $product->warranty = $request['warranty'];
+        $product->unitPrice = $request['price'];
+        $product->existence = $request['stock'];
+        $product->description = $request['desc'];
+        $product->fk_seller = auth()->user()->seller->id_seller;
+        if ($product->save()) {
+            return response()->json(
+                $product
+            );
+        } else {
+            return response()->json(
+                'error'
+            );
+        }
     }
 
     /**

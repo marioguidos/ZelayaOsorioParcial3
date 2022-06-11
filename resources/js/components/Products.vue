@@ -61,6 +61,7 @@
                                                     v-model="editedItem.price"
                                                     label="Precio ($)"
                                                     :rules="rules.price"
+                                                    type="number"
                                                 ></v-text-field>
                                             </v-col>
                                             <v-col cols="12" sm="6" md="6">
@@ -146,8 +147,9 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
-    props: ["products"],
+    props: ["products", "type_user"],
     data: () => ({
         search: "",
         dialog: false,
@@ -163,7 +165,6 @@ export default {
             { text: "Precio Unitario", value: "price" },
             { text: "Existencia", value: "stock" },
             { text: "Garantia", value: "warranty" },
-            { text: "Acciones", value: "actions", sortable: false },
         ],
         prods: [],
         editedIndex: -1,
@@ -216,16 +217,23 @@ export default {
     methods: {
         initialize() {
             console.log(this.products);
-            this.products.map((p) => {
-                this.prods.push({
-                    id: p.id,
-                    name: p.name,
-                    desc: p.description,
-                    price: p.unitPrice,
-                    stock: p.existence,
-                    warranty: p.warranty,
+            this.type_user == "seller"
+                ? this.headers.push({
+                      text: "Acciones",
+                      value: "actions",
+                      sortable: false,
+                  })
+                : "",
+                this.products.map((p) => {
+                    this.prods.push({
+                        id: p.id,
+                        name: p.name,
+                        desc: p.description,
+                        price: p.unitPrice,
+                        stock: p.existence,
+                        warranty: p.warranty,
+                    });
                 });
-            });
         },
 
         editItem(item) {
@@ -265,12 +273,44 @@ export default {
         save() {
             if (this.validator()) {
                 if (this.editedIndex > -1) {
+                    axios
+                        .post(
+                            "http://localhost:3000/seller/update",
+                            this.editedItem
+                        )
+                        .then((r) => {
+                            console.log(r);
+                            this.editedItem.id = r.data.id;
+                            this.editedItem.name = r.data.name;
+                            this.editedItem.warranty = r.data.warranty;
+                            this.editedItem.price = r.data.unitPrice;
+                            this.editedItem.desc = r.data.description;
+                        })
+                        .catch((e) => {
+                            console.log(e);
+                        });
                     Object.assign(
                         this.prods[this.editedIndex],
                         this.editedItem
                     );
                 } else {
-                    this.prods.push(this.editedItem);
+                    axios
+                        .post(
+                            "http://localhost:3000/seller/add",
+                            this.editedItem
+                        )
+                        .then((r) => {
+                            console.log(r);
+                            this.editedItem.id = r.data.id;
+                            this.editedItem.name = r.data.name;
+                            this.editedItem.warranty = r.data.warranty;
+                            this.editedItem.price = r.data.unitPrice;
+                            this.editedItem.desc = r.data.description;
+                            this.prods.push(this.editedItem);
+                        })
+                        .catch((e) => {
+                            console.log(e);
+                        });
                 }
                 this.close();
             }

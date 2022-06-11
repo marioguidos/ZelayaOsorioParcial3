@@ -5431,6 +5431,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -5578,8 +5580,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["products"],
+  props: ["products", "type_user"],
   data: function data() {
     return {
       search: "",
@@ -5606,10 +5610,6 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: "Garantia",
         value: "warranty"
-      }, {
-        text: "Acciones",
-        value: "actions",
-        sortable: false
       }],
       prods: [],
       editedIndex: -1,
@@ -5669,7 +5669,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       console.log(this.products);
-      this.products.map(function (p) {
+      this.type_user == "seller" ? this.headers.push({
+        text: "Acciones",
+        value: "actions",
+        sortable: false
+      }) : "", this.products.map(function (p) {
         _this.prods.push({
           id: p.id,
           name: p.name,
@@ -5714,11 +5718,34 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     save: function save() {
+      var _this4 = this;
+
       if (this.validator()) {
         if (this.editedIndex > -1) {
+          axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://localhost:3000/seller/update", this.editedItem).then(function (r) {
+            console.log(r);
+            _this4.editedItem.id = r.data.id;
+            _this4.editedItem.name = r.data.name;
+            _this4.editedItem.warranty = r.data.warranty;
+            _this4.editedItem.price = r.data.unitPrice;
+            _this4.editedItem.desc = r.data.description;
+          })["catch"](function (e) {
+            console.log(e);
+          });
           Object.assign(this.prods[this.editedIndex], this.editedItem);
         } else {
-          this.prods.push(this.editedItem);
+          axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://localhost:3000/seller/add", this.editedItem).then(function (r) {
+            console.log(r);
+            _this4.editedItem.id = r.data.id;
+            _this4.editedItem.name = r.data.name;
+            _this4.editedItem.warranty = r.data.warranty;
+            _this4.editedItem.price = r.data.unitPrice;
+            _this4.editedItem.desc = r.data.description;
+
+            _this4.prods.push(_this4.editedItem);
+          })["catch"](function (e) {
+            console.log(e);
+          });
         }
 
         this.close();
@@ -29265,6 +29292,7 @@ var render = function () {
                                                   attrs: {
                                                     label: "Precio ($)",
                                                     rules: _vm.rules.price,
+                                                    type: "number",
                                                   },
                                                   model: {
                                                     value: _vm.editedItem.price,

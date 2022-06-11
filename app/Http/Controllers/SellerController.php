@@ -15,9 +15,9 @@ class SellerController extends Controller
      */
     public function index()
     {
-        $products = Product::where ( 'fk_seller',auth()->user()->seller->id_seller)->get();
-        //dd($products);
-        return view('seller.index',compact('products'));
+        $products = Product::where('fk_seller', auth()->user()->seller->id_seller)->get();
+        $user_type = "seller";
+        return view('seller.index', compact('products','user_type'));
     }
 
     /**

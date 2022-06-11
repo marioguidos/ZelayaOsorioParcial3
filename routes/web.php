@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SellerController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,4 +23,6 @@ Auth::routes();
 
 Route::middleware(['auth', 'role:seller'])->name('seller.')->prefix('seller')->group(function () {
     Route::get('/', [SellerController::class, 'index'])->name('index');
+    Route::post('/add', [ProductController::class, 'store'])->name('create'); 
+    Route::post('/update', [ProductController::class, 'update'])->name('update');
 });
