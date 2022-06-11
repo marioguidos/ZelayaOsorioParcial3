@@ -4,8 +4,9 @@
             <v-data-table
                 :headers="headers"
                 :items="desserts"
-                sort-by="calories"
+                sort-by="name"
                 class="elevation-1"
+                :search="search"
             >
                 <template v-slot:top>
                     <v-toolbar flat>
@@ -13,6 +14,7 @@
                         <v-divider class="mx-4" inset vertical></v-divider>
                         <v-spacer></v-spacer>
                         <v-dialog v-model="dialog" max-width="500px">
+                            <v-spacer></v-spacer>
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn
                                     color="primary"
@@ -21,8 +23,16 @@
                                     v-bind="attrs"
                                     v-on="on"
                                 >
-                                    New Item
+                                    Nuevo Producto
                                 </v-btn>
+                                <v-spacer></v-spacer>
+                                <v-text-field
+                                    v-model="search"
+                                    append-icon="mdi-magnify"
+                                    label="Buscar"
+                                    single-line
+                                    hide-details
+                                ></v-text-field>
                             </template>
                             <v-card>
                                 <v-card-title>
@@ -114,10 +124,10 @@
                     </v-toolbar>
                 </template>
                 <template v-slot:item.actions="{ item }">
-                    <v-icon small class="mr-2" @click="editItem(item)">
+                    <v-icon large color="#EDE04D" class="mr-2" @click="editItem(item)">
                         mdi-pencil
                     </v-icon>
-                    <v-icon small @click="deleteItem(item)">
+                    <v-icon large color="#ED4F32" @click="deleteItem(item)">
                         mdi-delete
                     </v-icon>
                 </template>
@@ -132,20 +142,20 @@
 <script>
 export default {
     data: () => ({
+        search: "",
         dialog: false,
         dialogDelete: false,
         headers: [
             {
-                text: "Dessert (100g serving)",
-                align: "start",
-                sortable: false,
+                text: "Nombre",
+                align: "center",
                 value: "name",
             },
-            { text: "Calories", value: "calories" },
-            { text: "Fat (g)", value: "fat" },
-            { text: "Carbs (g)", value: "carbs" },
-            { text: "Protein (g)", value: "protein" },
-            { text: "Actions", value: "actions", sortable: false },
+            { text: "Descripcion", value: "calories" },
+            { text: "Precio Unitario", value: "fat" },
+            { text: "Existencia", value: "carbs" },
+            { text: "Garantia", value: "protein" },
+            { text: "Acciones", value: "actions", sortable: false },
         ],
         desserts: [],
         editedIndex: -1,
@@ -167,7 +177,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? "New Item" : "Edit Item";
+            return this.editedIndex === -1 ? "Nuevo Producto" : "Editar Producto";
         },
     },
 

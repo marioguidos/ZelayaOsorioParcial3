@@ -5562,30 +5562,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      search: "",
       dialog: false,
       dialogDelete: false,
       headers: [{
-        text: "Dessert (100g serving)",
-        align: "start",
-        sortable: false,
+        text: "Nombre",
+        align: "center",
         value: "name"
       }, {
-        text: "Calories",
+        text: "Descripcion",
         value: "calories"
       }, {
-        text: "Fat (g)",
+        text: "Precio Unitario",
         value: "fat"
       }, {
-        text: "Carbs (g)",
+        text: "Existencia",
         value: "carbs"
       }, {
-        text: "Protein (g)",
+        text: "Garantia",
         value: "protein"
       }, {
-        text: "Actions",
+        text: "Acciones",
         value: "actions",
         sortable: false
       }],
@@ -5609,7 +5619,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     formTitle: function formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "Nuevo Producto" : "Editar Producto";
     }
   },
   watch: {
@@ -29075,7 +29085,8 @@ var render = function () {
             attrs: {
               headers: _vm.headers,
               items: _vm.desserts,
-              "sort-by": "calories",
+              "sort-by": "name",
+              search: _vm.search,
             },
             scopedSlots: _vm._u([
               {
@@ -29125,10 +29136,28 @@ var render = function () {
                                       ),
                                       [
                                         _vm._v(
-                                          "\n                                New Item\n                            "
+                                          "\n                                Nuevo Producto\n                            "
                                         ),
                                       ]
                                     ),
+                                    _vm._v(" "),
+                                    _c("v-spacer"),
+                                    _vm._v(" "),
+                                    _c("v-text-field", {
+                                      attrs: {
+                                        "append-icon": "mdi-magnify",
+                                        label: "Buscar",
+                                        "single-line": "",
+                                        "hide-details": "",
+                                      },
+                                      model: {
+                                        value: _vm.search,
+                                        callback: function ($$v) {
+                                          _vm.search = $$v
+                                        },
+                                        expression: "search",
+                                      },
+                                    }),
                                   ]
                                 },
                               },
@@ -29142,6 +29171,8 @@ var render = function () {
                             },
                           },
                           [
+                            _c("v-spacer"),
+                            _vm._v(" "),
                             _vm._v(" "),
                             _c(
                               "v-card",
@@ -29444,7 +29475,7 @@ var render = function () {
                       "v-icon",
                       {
                         staticClass: "mr-2",
-                        attrs: { small: "" },
+                        attrs: { large: "", color: "#EDE04D" },
                         on: {
                           click: function ($event) {
                             return _vm.editItem(item)
@@ -29461,7 +29492,7 @@ var render = function () {
                     _c(
                       "v-icon",
                       {
-                        attrs: { small: "" },
+                        attrs: { large: "", color: "#ED4F32" },
                         on: {
                           click: function ($event) {
                             return _vm.deleteItem(item)
