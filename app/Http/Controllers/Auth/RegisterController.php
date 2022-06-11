@@ -100,7 +100,7 @@ class RegisterController extends Controller
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
-            ])->assignRole('admin');
+            ])->assignRole('auditor');
             Auditor::create([
                 "dui" => "123123213",
                 "address" => "Barrio el calvario",
