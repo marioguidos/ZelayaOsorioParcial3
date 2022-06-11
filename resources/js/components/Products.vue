@@ -101,23 +101,22 @@
                         </v-dialog>
                         <v-dialog v-model="dialogDelete" max-width="500px">
                             <v-card>
-                                <v-card-title class="text-h5"
-                                    >Are you sure you want to delete this
-                                    item?</v-card-title
+                                <v-card-title class="text-h5 text-center">
+                                    <v-spacer></v-spacer>
+                                    <v-icon color="#ED4F32" x-large>
+                                        mdi-delete</v-icon
+                                    >
+                                    <v-spacer></v-spacer>Desea borrar este
+                                    producto?</v-card-title
                                 >
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
+                                    <v-btn @click="closeDelete">Cancelar</v-btn>
                                     <v-btn
-                                        color="blue"
-                                        text
-                                        @click="closeDelete"
-                                        >Cancel</v-btn
-                                    >
-                                    <v-btn
-                                        color="blue darken-1"
-                                        text
+                                        color="#ED4F32"
+                                        style="color: white"
                                         @click="deleteItemConfirm"
-                                        >OK</v-btn
+                                        >Borrar</v-btn
                                     >
                                     <v-spacer></v-spacer>
                                 </v-card-actions>
@@ -244,14 +243,22 @@ export default {
         },
 
         deleteItem(item) {
-            this.editedIndex = this.desserts.indexOf(item);
+            this.editedIndex = this.prods.indexOf(item);
             this.editedItem = Object.assign({}, item);
             this.dialogDelete = true;
         },
 
         deleteItemConfirm() {
-            this.desserts.splice(this.editedIndex, 1);
-            this.closeDelete();
+            axios
+                .post("http://localhost:3000/seller/destroy", this.editedItem)
+                .then((r) => {
+                    console.log(r);
+                    this.prods.splice(this.editedIndex, 1);
+                    this.closeDelete();
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
         },
 
         close() {

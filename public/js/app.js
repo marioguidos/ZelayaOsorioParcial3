@@ -5580,7 +5580,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["products", "type_user"],
@@ -5691,44 +5690,53 @@ __webpack_require__.r(__webpack_exports__);
       this.dialog = true;
     },
     deleteItem: function deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.prods.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
     deleteItemConfirm: function deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
-      this.closeDelete();
-    },
-    close: function close() {
       var _this2 = this;
 
-      this.dialog = false;
-      this.$nextTick(function () {
-        _this2.editedItem = Object.assign({}, _this2.defaultItem);
-        _this2.editedIndex = -1;
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://localhost:3000/seller/destroy", this.editedItem).then(function (r) {
+        console.log(r);
+
+        _this2.prods.splice(_this2.editedIndex, 1);
+
+        _this2.closeDelete();
+      })["catch"](function (e) {
+        console.log(e);
       });
     },
-    closeDelete: function closeDelete() {
+    close: function close() {
       var _this3 = this;
 
-      this.dialogDelete = false;
+      this.dialog = false;
       this.$nextTick(function () {
         _this3.editedItem = Object.assign({}, _this3.defaultItem);
         _this3.editedIndex = -1;
       });
     },
-    save: function save() {
+    closeDelete: function closeDelete() {
       var _this4 = this;
+
+      this.dialogDelete = false;
+      this.$nextTick(function () {
+        _this4.editedItem = Object.assign({}, _this4.defaultItem);
+        _this4.editedIndex = -1;
+      });
+    },
+    save: function save() {
+      var _this5 = this;
 
       if (this.validator()) {
         if (this.editedIndex > -1) {
           axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://localhost:3000/seller/update", this.editedItem).then(function (r) {
             console.log(r);
-            _this4.editedItem.id = r.data.id;
-            _this4.editedItem.name = r.data.name;
-            _this4.editedItem.warranty = r.data.warranty;
-            _this4.editedItem.price = r.data.unitPrice;
-            _this4.editedItem.desc = r.data.description;
+            _this5.editedItem.id = r.data.id;
+            _this5.editedItem.name = r.data.name;
+            _this5.editedItem.warranty = r.data.warranty;
+            _this5.editedItem.price = r.data.unitPrice;
+            _this5.editedItem.desc = r.data.description;
           })["catch"](function (e) {
             console.log(e);
           });
@@ -5736,13 +5744,13 @@ __webpack_require__.r(__webpack_exports__);
         } else {
           axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://localhost:3000/seller/add", this.editedItem).then(function (r) {
             console.log(r);
-            _this4.editedItem.id = r.data.id;
-            _this4.editedItem.name = r.data.name;
-            _this4.editedItem.warranty = r.data.warranty;
-            _this4.editedItem.price = r.data.unitPrice;
-            _this4.editedItem.desc = r.data.description;
+            _this5.editedItem.id = r.data.id;
+            _this5.editedItem.name = r.data.name;
+            _this5.editedItem.warranty = r.data.warranty;
+            _this5.editedItem.price = r.data.unitPrice;
+            _this5.editedItem.desc = r.data.description;
 
-            _this4.prods.push(_this4.editedItem);
+            _this5.prods.push(_this5.editedItem);
           })["catch"](function (e) {
             console.log(e);
           });
@@ -29435,11 +29443,34 @@ var render = function () {
                             _c(
                               "v-card",
                               [
-                                _c("v-card-title", { staticClass: "text-h5" }, [
-                                  _vm._v(
-                                    "Are you sure you want to delete this\n                                item?"
-                                  ),
-                                ]),
+                                _c(
+                                  "v-card-title",
+                                  { staticClass: "text-h5 text-center" },
+                                  [
+                                    _c("v-spacer"),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-icon",
+                                      {
+                                        attrs: {
+                                          color: "#ED4F32",
+                                          "x-large": "",
+                                        },
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                    mdi-delete"
+                                        ),
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("v-spacer"),
+                                    _vm._v(
+                                      "Desea borrar este\n                                producto?"
+                                    ),
+                                  ],
+                                  1
+                                ),
                                 _vm._v(" "),
                                 _c(
                                   "v-card-actions",
@@ -29448,23 +29479,18 @@ var render = function () {
                                     _vm._v(" "),
                                     _c(
                                       "v-btn",
-                                      {
-                                        attrs: { color: "blue", text: "" },
-                                        on: { click: _vm.closeDelete },
-                                      },
-                                      [_vm._v("Cancel")]
+                                      { on: { click: _vm.closeDelete } },
+                                      [_vm._v("Cancelar")]
                                     ),
                                     _vm._v(" "),
                                     _c(
                                       "v-btn",
                                       {
-                                        attrs: {
-                                          color: "blue darken-1",
-                                          text: "",
-                                        },
+                                        staticStyle: { color: "white" },
+                                        attrs: { color: "#ED4F32" },
                                         on: { click: _vm.deleteItemConfirm },
                                       },
-                                      [_vm._v("OK")]
+                                      [_vm._v("Borrar")]
                                     ),
                                     _vm._v(" "),
                                     _c("v-spacer"),

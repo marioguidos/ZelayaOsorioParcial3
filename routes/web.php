@@ -25,4 +25,5 @@ Route::middleware(['auth', 'role:seller'])->name('seller.')->prefix('seller')->g
     Route::get('/', [SellerController::class, 'index'])->name('index');
     Route::post('/add', [ProductController::class, 'store'])->name('create'); 
     Route::post('/update', [ProductController::class, 'update'])->name('update');
+    Route::post('/destroy', [ProductController::class, 'destroy'])->name('destroy');
 });
