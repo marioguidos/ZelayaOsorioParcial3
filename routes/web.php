@@ -20,6 +20,14 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('report/product', [App\http\controllers\ProductController::class,'pdf'])->name('report.product');
+
+Route::get('report/seller', [App\http\controllers\ProductController::class,'seller'])->name('report.seller');
+Route::get('generateRepByAdmin/{id}', [ReportController::class, 'generateRepByAdmin']);
+//Route::get('report.productid/{$id}', [ProductController::class, 'productid'])->name('report.productid');;
+
 Route::middleware(['auth', 'role:seller'])->name('seller.')->prefix('seller')->group(function () {
     Route::get('/', [SellerController::class, 'index'])->name('index');
+    
+    
 });

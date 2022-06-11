@@ -39,6 +39,9 @@
                     href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
+                 <a class="btn btn-success" href="{{route('report.product')}}" >Reporte producto</a>
+                 <a class="btn btn-success" href="{{route('report.seller')}}">Reporte Vendedor</a>
+                 <a class="btn btn-success">Reporte parametrizado</a>
                 <button class="navbar-toggler"
                     type="button"
                     data-bs-toggle="collapse"

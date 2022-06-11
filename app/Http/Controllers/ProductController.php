@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use App\Models\Product;
+use App\Models\Seller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class ProductController extends Controller
 {
@@ -16,6 +19,42 @@ class ProductController extends Controller
     {
         //
     }
+    public function pdf()
+    {
+        $product = Product::all();
+       
+        //$user=auth()->user()->seller->id_usuario;
+
+        $pdf = PDF::loadView('report.product',['product'=>$product]);
+        //$pdf->loadHTML('<h1>Test</h1>');
+        return $pdf->stream();
+    }
+    public function seller()
+    {
+        $seller = Seller::all();
+       
+        //$user=auth()->user()->seller->id_usuario;
+
+        $pdf = PDF::loadView('report.seller',['seller'=>$seller]);
+        //$pdf->loadHTML('<h1>Test</h1>');
+        return $pdf->stream();
+    }
+    public function productid($id)
+    {
+
+        $product = Product::join("sellers","seller.id_seller","=","products.fk_seller")
+        ->where("products.fk_seller","=",$id)
+        ->get();
+
+        dd($product);
+       
+        //$user=auth()->user()->seller->id_usuario;
+
+        //$pdf = PDF::loadView('report.seller',['seller'=>$seller]);
+        //$pdf->loadHTML('<h1>Test</h1>');
+        //return $pdf->stream();
+    }
+    
 
     /**
      * Show the form for creating a new resource.
