@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Auditor extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'dui',
+        'nit',
+        'address',
+        'id_usuario',
+    ];
 }
