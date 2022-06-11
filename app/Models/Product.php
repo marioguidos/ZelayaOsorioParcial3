@@ -8,9 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-
+    protected $fillable = [
+        'name',
+        'description',
+        'unitPrice',
+        'existence',
+        'warranty',
+        'fk_seller',
+    ];
     public function seller()
     {
-        return $this->hasOne(seller::class ,'id_seller');
+        return $this->belongsTo(Seller::class, "id_seller");
     }
 }

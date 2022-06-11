@@ -3,7 +3,7 @@
         <v-container>
             <v-data-table
                 :headers="headers"
-                :items="desserts"
+                :items="prods"
                 sort-by="name"
                 class="elevation-1"
                 :search="search"
@@ -42,36 +42,44 @@
                                 <v-card-text>
                                     <v-container>
                                         <v-row>
-                                            <v-col cols="12" sm="6" md="4">
+                                            <v-col cols="12" sm="6" md="6">
                                                 <v-text-field
                                                     v-model="editedItem.name"
-                                                    label="Dessert name"
+                                                    label="Nombre"
+                                                    :rules="rules.name"
                                                 ></v-text-field>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="4">
+                                            <v-col cols="12" sm="6" md="6">
+                                                <v-text-field
+                                                    v-model="editedItem.desc"
+                                                    label="Descripción"
+                                                    :rules="rules.desc"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="6" md="6">
+                                                <v-text-field
+                                                    v-model="editedItem.price"
+                                                    label="Precio ($)"
+                                                    :rules="rules.price"
+                                                    type="number"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="6" md="6">
+                                                <v-text-field
+                                                    v-model="editedItem.stock"
+                                                    :rules="rules.stock"
+                                                    label="Existencias"
+                                                    type="number"
+                                                ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="6" md="6">
                                                 <v-text-field
                                                     v-model="
-                                                        editedItem.calories
+                                                        editedItem.warranty
                                                     "
-                                                    label="Calories"
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field
-                                                    v-model="editedItem.fat"
-                                                    label="Fat (g)"
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field
-                                                    v-model="editedItem.carbs"
-                                                    label="Carbs (g)"
-                                                ></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field
-                                                    v-model="editedItem.protein"
-                                                    label="Protein (g)"
+                                                    label="Garantía"
+                                                    :rules="rules.warranty"
+                                                    type="month"
                                                 ></v-text-field>
                                             </v-col>
                                         </v-row>
@@ -80,42 +88,35 @@
 
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
+                                    <v-btn @click="close"> Cancelar </v-btn>
                                     <v-btn
-                                        color="blue darken-1"
-                                        text
-                                        @click="close"
-                                    >
-                                        Cancel
-                                    </v-btn>
-                                    <v-btn
-                                        color="blue darken-1"
-                                        text
+                                        color="#15CD72"
                                         @click="save"
+                                        style="color: white"
                                     >
-                                        Save
+                                        Guardar
                                     </v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
                         <v-dialog v-model="dialogDelete" max-width="500px">
                             <v-card>
-                                <v-card-title class="text-h5"
-                                    >Are you sure you want to delete this
-                                    item?</v-card-title
+                                <v-card-title class="text-h5 text-center">
+                                    <v-spacer></v-spacer>
+                                    <v-icon color="#ED4F32" x-large>
+                                        mdi-delete</v-icon
+                                    >
+                                    <v-spacer></v-spacer>Desea borrar este
+                                    producto?</v-card-title
                                 >
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
+                                    <v-btn @click="closeDelete">Cancelar</v-btn>
                                     <v-btn
-                                        color="blue darken-1"
-                                        text
-                                        @click="closeDelete"
-                                        >Cancel</v-btn
-                                    >
-                                    <v-btn
-                                        color="blue darken-1"
-                                        text
+                                        color="#ED4F32"
+                                        style="color: white"
                                         @click="deleteItemConfirm"
-                                        >OK</v-btn
+                                        >Borrar</v-btn
                                     >
                                     <v-spacer></v-spacer>
                                 </v-card-actions>
@@ -124,7 +125,12 @@
                     </v-toolbar>
                 </template>
                 <template v-slot:item.actions="{ item }">
-                    <v-icon large color="#EDE04D" class="mr-2" @click="editItem(item)">
+                    <v-icon
+                        large
+                        color="#EDE04D"
+                        class="mr-2"
+                        @click="editItem(item)"
+                    >
                         mdi-pencil
                     </v-icon>
                     <v-icon large color="#ED4F32" @click="deleteItem(item)">
@@ -140,44 +146,57 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
+    props: ["products", "type_user"],
     data: () => ({
         search: "",
         dialog: false,
         dialogDelete: false,
         headers: [
+            { text: "ID", align: "start", value: "id", sortable: false },
             {
                 text: "Nombre",
                 align: "center",
                 value: "name",
             },
-            { text: "Descripcion", value: "calories" },
-            { text: "Precio Unitario", value: "fat" },
-            { text: "Existencia", value: "carbs" },
-            { text: "Garantia", value: "protein" },
-            { text: "Acciones", value: "actions", sortable: false },
+            { text: "Descripcion", value: "desc" },
+            { text: "Precio Unitario", value: "price" },
+            { text: "Existencia", value: "stock" },
+            { text: "Garantia", value: "warranty" },
         ],
-        desserts: [],
+        prods: [],
         editedIndex: -1,
         editedItem: {
+            id: "",
             name: "",
-            calories: 0,
-            fat: 0,
-            carbs: 0,
-            protein: 0,
+            desc: "",
+            price: "",
+            stock: 0,
+            warranty: "",
         },
         defaultItem: {
+            id: "",
             name: "",
-            calories: 0,
-            fat: 0,
-            carbs: 0,
-            protein: 0,
+            desc: "",
+            price: "",
+            stock: 0,
+            warranty: "",
+        },
+        rules: {
+            name: [(v) => !!v || "Valor requerido"],
+            desc: [(v) => !!v || "Valor requerido"],
+            price: [(v) => !!v || "Valor requerido"],
+            stock: [(v) => !!v || "Valor requerido"],
+            warranty: [(v) => !!v || "Valor requerido"],
         },
     }),
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? "Nuevo Producto" : "Editar Producto";
+            return this.editedIndex === -1
+                ? "Nuevo Producto"
+                : "Editar Producto";
         },
     },
 
@@ -196,95 +215,50 @@ export default {
 
     methods: {
         initialize() {
-            this.desserts = [
-                {
-                    name: "Frozen Yogurt",
-                    calories: 159,
-                    fat: 6.0,
-                    carbs: 24,
-                    protein: 4.0,
-                },
-                {
-                    name: "Ice cream sandwich",
-                    calories: 237,
-                    fat: 9.0,
-                    carbs: 37,
-                    protein: 4.3,
-                },
-                {
-                    name: "Eclair",
-                    calories: 262,
-                    fat: 16.0,
-                    carbs: 23,
-                    protein: 6.0,
-                },
-                {
-                    name: "Cupcake",
-                    calories: 305,
-                    fat: 3.7,
-                    carbs: 67,
-                    protein: 4.3,
-                },
-                {
-                    name: "Gingerbread",
-                    calories: 356,
-                    fat: 16.0,
-                    carbs: 49,
-                    protein: 3.9,
-                },
-                {
-                    name: "Jelly bean",
-                    calories: 375,
-                    fat: 0.0,
-                    carbs: 94,
-                    protein: 0.0,
-                },
-                {
-                    name: "Lollipop",
-                    calories: 392,
-                    fat: 0.2,
-                    carbs: 98,
-                    protein: 0,
-                },
-                {
-                    name: "Honeycomb",
-                    calories: 408,
-                    fat: 3.2,
-                    carbs: 87,
-                    protein: 6.5,
-                },
-                {
-                    name: "Donut",
-                    calories: 452,
-                    fat: 25.0,
-                    carbs: 51,
-                    protein: 4.9,
-                },
-                {
-                    name: "KitKat",
-                    calories: 518,
-                    fat: 26.0,
-                    carbs: 65,
-                    protein: 7,
-                },
-            ];
+            console.log(this.products);
+            this.type_user == "seller"
+                ? this.headers.push({
+                      text: "Acciones",
+                      value: "actions",
+                      sortable: false,
+                  })
+                : "",
+                this.products.map((p) => {
+                    this.prods.push({
+                        id: p.id,
+                        name: p.name,
+                        desc: p.description,
+                        price: p.unitPrice,
+                        stock: p.existence,
+                        warranty: p.warranty,
+                    });
+                });
         },
 
         editItem(item) {
-            this.editedIndex = this.desserts.indexOf(item);
+            console.log(item);
+            this.editedIndex = this.prods.indexOf(item);
             this.editedItem = Object.assign({}, item);
             this.dialog = true;
         },
 
         deleteItem(item) {
-            this.editedIndex = this.desserts.indexOf(item);
+            this.editedIndex = this.prods.indexOf(item);
             this.editedItem = Object.assign({}, item);
             this.dialogDelete = true;
         },
 
         deleteItemConfirm() {
-            this.desserts.splice(this.editedIndex, 1);
-            this.closeDelete();
+            axios
+                .post("http://localhost:3000/seller/destroy", this.editedItem)
+                .then((r) => {
+                    console.log(r);
+                    this.prods.splice(this.editedIndex, 1);
+                    this.closeDelete();
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
         },
 
         close() {
@@ -304,12 +278,63 @@ export default {
         },
 
         save() {
-            if (this.editedIndex > -1) {
-                Object.assign(this.desserts[this.editedIndex], this.editedItem);
-            } else {
-                this.desserts.push(this.editedItem);
+            if (this.validator()) {
+                if (this.editedIndex > -1) {
+                    axios
+                        .post(
+                            "http://localhost:3000/seller/update",
+                            this.editedItem
+                        )
+                        .then((r) => {
+                            console.log(r);
+                            this.editedItem.id = r.data.id;
+                            this.editedItem.name = r.data.name;
+                            this.editedItem.warranty = r.data.warranty;
+                            this.editedItem.price = r.data.unitPrice;
+                            this.editedItem.desc = r.data.description;
+                        })
+                        .catch((e) => {
+                            console.log(e);
+                        });
+                    Object.assign(
+                        this.prods[this.editedIndex],
+                        this.editedItem
+                    );
+                } else {
+                    axios
+                        .post(
+                            "http://localhost:3000/seller/add",
+                            this.editedItem
+                        )
+                        .then((r) => {
+                            console.log(r);
+                            this.editedItem.id = r.data.id;
+                            this.editedItem.name = r.data.name;
+                            this.editedItem.warranty = r.data.warranty;
+                            this.editedItem.price = r.data.unitPrice;
+                            this.editedItem.desc = r.data.description;
+                            this.prods.push(this.editedItem);
+                        })
+                        .catch((e) => {
+                            console.log(e);
+                        });
+                }
+                this.close();
             }
-            this.close();
+        },
+        validator() {
+            let it = this.editedItem;
+            if (
+                it.name != "" ||
+                it.desc != "" ||
+                it.price != "" ||
+                it.stock != "" ||
+                it.warranty != ""
+            ) {
+                return true;
+            } else {
+                return false;
+            }
         },
     },
 };
