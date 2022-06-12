@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auditor;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class AuditorController extends Controller
@@ -14,7 +15,10 @@ class AuditorController extends Controller
      */
     public function index()
     {
-        //
+        
+        $products = Product::all();
+        $user_type = "auditor";
+        return view('auditor.index', compact('products', 'user_type'));
     }
 
     /**
