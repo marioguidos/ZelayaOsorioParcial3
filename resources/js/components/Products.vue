@@ -250,7 +250,7 @@ export default {
 
         deleteItemConfirm() {
             axios
-                .post("http://localhost:3000/seller/destroy", this.editedItem)
+                .post("http://127.0.0.1:8000/seller/destroy", this.editedItem)
                 .then((r) => {
                     console.log(r);
                     this.prods.splice(this.editedIndex, 1);
@@ -282,7 +282,7 @@ export default {
                 if (this.editedIndex > -1) {
                     axios
                         .post(
-                            "http://localhost:3000/seller/update",
+                            "http://127.0.0.1:8000/seller/update",
                             this.editedItem
                         )
                         .then((r) => {
@@ -303,7 +303,7 @@ export default {
                 } else {
                     axios
                         .post(
-                            "http://localhost:3000/seller/add",
+                            "http://127.0.0.1:8000/seller/add",
                             this.editedItem
                         )
                         .then((r) => {

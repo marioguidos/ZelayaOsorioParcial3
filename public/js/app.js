@@ -5697,7 +5697,7 @@ __webpack_require__.r(__webpack_exports__);
     deleteItemConfirm: function deleteItemConfirm() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://localhost:3000/seller/destroy", this.editedItem).then(function (r) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://127.0.0.1:8000/seller/destroy", this.editedItem).then(function (r) {
         console.log(r);
 
         _this2.prods.splice(_this2.editedIndex, 1);
@@ -5730,7 +5730,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.validator()) {
         if (this.editedIndex > -1) {
-          axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://localhost:3000/seller/update", this.editedItem).then(function (r) {
+          axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://127.0.0.1:8000/seller/update", this.editedItem).then(function (r) {
             console.log(r);
             _this5.editedItem.id = r.data.id;
             _this5.editedItem.name = r.data.name;
@@ -5742,7 +5742,7 @@ __webpack_require__.r(__webpack_exports__);
           });
           Object.assign(this.prods[this.editedIndex], this.editedItem);
         } else {
-          axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://localhost:3000/seller/add", this.editedItem).then(function (r) {
+          axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://127.0.0.1:8000/seller/add", this.editedItem).then(function (r) {
             console.log(r);
             _this5.editedItem.id = r.data.id;
             _this5.editedItem.name = r.data.name;
