@@ -10,7 +10,7 @@
     <meta name="csrf-token"
         content="{{ csrf_token() }}">
 
-    <title>Parcial AFE</title>
+    <title> Parcial-3-AFE</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"
@@ -37,7 +37,7 @@
             <div class="container">
                 <a class="navbar-brand"
                     href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    Parcial-3-AFE
                 </a>
                 <button class="navbar-toggler"
                     type="button"
@@ -53,7 +53,16 @@
                     id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-
+                        @if (Route::has('login'))
+                            @if (Auth::user())
+                                @if (Auth::user()->hasRole('seller'))
+                                    <li class="nav-item">
+                                        <a class="nav-link"
+                                            href="/seller/register">Registrar Auditor</a>
+                                    </li>
+                                @endif
+                            @endif
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -91,7 +100,7 @@
                                     <a class="dropdown-item"
                                         href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
-                                                                 document.getElementById('logout-form').submit();">
+                                                                                 document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 

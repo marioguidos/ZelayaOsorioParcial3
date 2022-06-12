@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuditorController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SellerController;
 use Illuminate\Support\Facades\Route;
@@ -21,9 +22,14 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::middleware(['auth', 'role:auditor'])->name('auditor.')->prefix('auditor')->group(function () {
+    Route::get('/', [AuditorController::class, 'index'])->name('index');
+});
 Route::middleware(['auth', 'role:seller'])->name('seller.')->prefix('seller')->group(function () {
     Route::get('/', [SellerController::class, 'index'])->name('index');
-    Route::post('/add', [ProductController::class, 'store'])->name('create'); 
+    Route::post('/add', [ProductController::class, 'store'])->name('create');
     Route::post('/update', [ProductController::class, 'update'])->name('update');
     Route::post('/destroy', [ProductController::class, 'destroy'])->name('destroy');
+    Route::get('/register', [SellerController::class, 'registerAu'])->name('register');
+    Route::post('/register', [SellerController::class, 'register'])->name('register');
 });
